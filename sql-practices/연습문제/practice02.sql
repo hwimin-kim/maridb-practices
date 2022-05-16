@@ -34,17 +34,17 @@
 
 -- 문제6.
 -- 최고 어린 사원의 나이와 최 연장자의 나이는?
-	select truncate(
+	select floor(
 				max(
 					period_diff(
 						date_format(curdate(), '%Y%m'),
-                        date_format(birth_date, '%Y%m')))/12,-1
+                        date_format(birth_date, '%Y%m')))/12
 				   ) as '최고참',
-		  truncate(
+		  floor(
 				min(
 					period_diff(
 						date_format(curdate(), '%Y%m'),
-                        date_format(birth_date, '%Y%m')))/12,-1
+                        date_format(birth_date, '%Y%m')))/12
 				  ) as '막내'
     from employees;
 
