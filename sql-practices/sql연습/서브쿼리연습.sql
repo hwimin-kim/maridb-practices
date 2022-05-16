@@ -145,51 +145,35 @@ select a.first_name, b.salary
         group by a.dept_no;
         
 	-- sol1) where subquery: in(=any)
-    SELECT 
-    d.dept_name, b.first_name, c.salary
-FROM
-    dept_emp a,
-    employees b,
-    salaries c,
-    departments d
-WHERE
-    a.emp_no = b.emp_no
-        AND b.emp_no = c.emp_no
-        AND d.dept_no = a.dept_no
-        AND a.to_date LIKE '9999%'
-        AND c.to_date LIKE '9999%'
-        AND (a.dept_no , c.salary) IN (SELECT 
-            a.dept_no, MAX(b.salary)
-        FROM
-            dept_emp a,
-            salaries b
-        WHERE
-            a.emp_no = b.emp_no
-                AND a.to_date LIKE '9999%'
-                AND b.to_date LIKE '9999%'
-        GROUP BY a.dept_no);
+    select d.dept_name, b.first_name, c.salary
+		from dept_emp a, employees b, salaries c, departments d
+        where a.emp_no = b.emp_no
+        and b.emp_no = c.emp_no
+        and d.dept_no = a.dept_no
+        and a.to_date like '9999%'
+        and c.to_date like '9999%'
+        and (a.dept_no, c.salary) in (select a.dept_no ,max(b.salary)
+									  from dept_emp a, salaries b
+									  where a.emp_no = b.emp_no
+									  and a.to_date like '9999%'
+									  and b.to_date like '9999%'
+									  group by a.dept_no);
 -- sol2) from subquery
-SELECT 
-    d.dept_name, b.first_name, c.salary
-FROM
-    dept_emp a,
-    employees b,
-    salaries c,
-    departments d,
-    (SELECT 
-        a.dept_no, MAX(b.salary) AS max_salary
-    FROM
-        dept_emp a, salaries b
-    WHERE
-        a.emp_no = b.emp_no
-            AND a.to_date LIKE '9999%'
-            AND b.to_date LIKE '9999%'
-    GROUP BY a.dept_no) e
-WHERE
-    a.emp_no = b.emp_no
-        AND b.emp_no = c.emp_no
-        AND d.dept_no = a.dept_no
-        AND a.dept_no = e.dept_no
-        AND a.to_date LIKE '9999%'
-        AND c.to_date LIKE '9999%'
-        AND c.salary = e.max_salary;
+    select d.dept_name, b.first_name, c.salary
+		from dept_emp a,
+			 employees b,
+			 salaries c,
+             departments d,
+             (select a.dept_no ,max(b.salary) as max_salary
+				from dept_emp a, salaries b
+				where a.emp_no = b.emp_no
+				and a.to_date like '9999%'
+				and b.to_date like '9999%'
+				group by a.dept_no) e
+        where a.emp_no = b.emp_no
+        and b.emp_no = c.emp_no
+        and d.dept_no = a.dept_no
+        and a.dept_no = e.dept_no
+        and a.to_date like '9999%'
+        and c.to_date like '9999%'
+        and c.salary = e.max_salary;
