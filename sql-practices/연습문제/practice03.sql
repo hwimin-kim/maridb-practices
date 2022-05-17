@@ -3,7 +3,7 @@
 -- 문제 1. 
 -- 현재 급여가 많은 직원부터 직원의 사번, 이름, 그리고 연봉을 출력 하시오.
 SELECT 
-    a.emp_no, a.first_name, b.salary
+    a.emp_no, concat(a.first_name, ' ',a.last_name) as emp_fullname, b.salary
 FROM
     employees a,
     salaries b
@@ -15,7 +15,7 @@ ORDER BY b.salary DESC;
 -- 문제2.
 -- 전체 사원의 사번, 이름, 현재 직책을 이름 순서로 출력하세요.
 SELECT 
-    a.emp_no, a.first_name, b.title
+    a.emp_no, concat(a.first_name, ' ',a.last_name) as emp_fullname, b.title
 FROM
     employees a,
     titles b
@@ -27,7 +27,7 @@ ORDER BY a.first_name ASC;
 -- 문제3.
 -- 전체 사원의 사번, 이름, 현재 부서를 이름 순서로 출력하세요..
 SELECT 
-    a.emp_no, a.first_name, c.dept_name
+    a.emp_no, concat(a.first_name, ' ',a.last_name) as emp_fullname, c.dept_name
 FROM
     employees a,
     dept_emp b,
@@ -41,7 +41,7 @@ ORDER BY a.first_name ASC;
 -- 문제4.
 -- 전체 사원의 사번, 이름, 연봉, 직책, 부서를 모두 이름 순서로 출력합니다.
 SELECT 
-    a.emp_no, CONCAT(a.first_name, ' ', a.last_name) AS '직원명', b.salary, c.title, e.dept_name
+    a.emp_no, concat(a.first_name, ' ',a.last_name) as emp_fullname, b.salary, c.title, e.dept_name
 FROM
     employees a,
     salaries b,
@@ -58,7 +58,7 @@ ORDER BY a.first_name;
 -- 문제5.
 -- ‘Technique Leader’의 직책으로 과거에 근무한 적이 있는 모든 사원의 사번과 이름을 출력하세요. (현재 ‘Technique Leader’의 직책(으로 근무하는 사원은 고려하지 않습니다.) 이름은 first_name과 last_name을 합쳐 출력 합니다.
 SELECT 
-    a.emp_no, CONCAT(a.first_name, ' ', a.last_name) AS '직원명'
+    a.emp_no, concat(a.first_name, ' ',a.last_name) as emp_fullname
 FROM
     employees a,
     titles b
@@ -70,7 +70,7 @@ WHERE
 -- 문제6.
 -- 직원 이름(last_name) 중에서 S(대문자)로 시작하는 직원들의 이름, 부서명, 직책을 조회하세요.
 SELECT 
-    CONCAT(a.first_name, ' ', a.last_name) AS '직원명',
+    concat(a.first_name, ' ',a.last_name) as emp_fullname,
     c.dept_name,
     d.title
 FROM
