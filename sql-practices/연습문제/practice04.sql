@@ -24,7 +24,7 @@ WHERE
 -- 문제2. 
 -- 현재, 각 부서별로 최고의 급여를 받는 사원의 사번, 이름, 부서 연봉을 조회하세요. 단 조회결과는 연봉의 내림차순으로 정렬되어 나타나야 합니다. 
 -- SELECT 
---     a.dept_no, MAX(b.salary)
+--     a.dept_no, MAX(b.salary) as max_salary
 -- FROM
 --     dept_emp a,
 --     salaries b
@@ -34,29 +34,33 @@ WHERE
 --         AND b.to_date LIKE '9999%'
 -- GROUP BY a.dept_no;
 SELECT 
-    a.emp_no, concat(a.first_name, ' ',a.last_name) as emp_fullname, c.dept_name, d.salary
+    a.emp_no,
+    CONCAT(a.first_name, ' ', a.last_name) AS emp_fullname,
+    c.dept_name,
+    d.salary
 FROM
     employees a,
     dept_emp b,
     departments c,
-    salaries d
+    salaries d,
+    (SELECT 
+        a.dept_no, MAX(b.salary) AS max_salary
+    FROM
+        dept_emp a, salaries b
+    WHERE
+        a.emp_no = b.emp_no
+            AND a.to_date LIKE '9999%'
+            AND b.to_date LIKE '9999%'
+    GROUP BY a.dept_no) e
 WHERE
     a.emp_no = b.emp_no
         AND b.dept_no = c.dept_no
         AND a.emp_no = d.emp_no
+        AND b.dept_no = e.dept_no
         AND b.to_date LIKE '9999%'
         AND d.to_date LIKE '9999%'
-        AND (c.dept_no , d.salary) IN (SELECT 
-            a.dept_no, MAX(b.salary)
-        FROM
-            dept_emp a,
-            salaries b
-        WHERE
-            a.emp_no = b.emp_no
-                AND a.to_date LIKE '9999%'
-                AND b.to_date LIKE '9999%'
-        GROUP BY a.dept_no)
-ORDER BY d.salary;
+        AND d.salary = e.max_salary
+ORDER BY d.salary DESC;
 
 -- 문제3.
 -- 현재, 자신의 부서 평균 급여보다 연봉(salary)이 많은 사원의 사번, 이름과 연봉을 조회하세요 
@@ -105,7 +109,10 @@ WHERE
 --     a.emp_no = b.emp_no
 --         AND b.to_date LIKE '9999%';
 SELECT 
-    a.emp_no, concat(a.first_name, ' ',a.last_name) as emp_fullname, m.manager_name, b.dept_name
+    a.emp_no,
+    CONCAT(a.first_name, ' ', a.last_name) AS emp_fullname,
+    m.manager_name,
+    b.dept_name
 FROM
     employees a,
     departments b,
