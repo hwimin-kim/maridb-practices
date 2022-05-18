@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class deleteTest01 {
+public class DeleteTest01 {
 	private static final String ID = "webdb";
 	private static final String PASSWORD = "webdb";
 	
