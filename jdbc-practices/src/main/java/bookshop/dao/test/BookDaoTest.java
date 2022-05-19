@@ -8,14 +8,29 @@ import bookshop.vo.BookVo;
 public class BookDaoTest {
 
 	public static void main(String[] args) {
-		//	testInsert();
-		testFindAll();
+		// testInsert();
+		testUpdate();
+		//testFindAll();
 	}
 
 	private static void testFindAll() {
 		List<BookVo> list = new BookDao().findAll();
 		for(BookVo vo : list)
 			System.out.println(vo);	
+	}
+	
+	private static void testUpdate() {
+		BookDao dao = new BookDao();
+		BookVo vo = new BookVo();
+		vo.setNo(1L);
+		vo.setStateCode("대여중");
+		
+		dao.update(vo);
+		
+		// test 성공 여부
+		vo = dao.findByNo(1L);
+		if("대여중".equals(vo.getStateCode()))
+			System.out.println("성공");
 	}
 
 	public static void testInsert() {
