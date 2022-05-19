@@ -4,9 +4,10 @@
 desc book;
 desc author;
 
+-- auto_increment reset
 delete from book;
-
 alter table book auto_increment 1;
+
 -- AuthorDao:insert
 insert into author values(null, '원수연');
 
