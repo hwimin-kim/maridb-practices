@@ -12,6 +12,7 @@ alter table book auto_increment 1;
 insert into author values(null, '원수연');
 
 -- select author
+select * from book;
 select * from author;
 
 -- BookDao:insert
